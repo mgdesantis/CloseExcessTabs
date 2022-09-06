@@ -8,7 +8,7 @@
     "action": {
         "default_popup": "CloseExcessTabsAction.html"
     },
-    "permissions": ["tabs", "storage"],
+    "permissions": ["storage"],
     "background": {
         "service_worker": "CloseExcessTabs.js"
     }
