@@ -2,6 +2,7 @@ function save_options() {
     var status = document.getElementById('status');
     var rm = document.getElementById('rm').value;
     var ta = document.getElementById('ta').value;
+    var al = document.getElementById('al').checked;
     ta = Number.parseInt(ta);
     if (Number.isNaN(ta) || 1 > ta) {
         console.log("[Remove Options] invalid value");
@@ -10,9 +11,10 @@ function save_options() {
     }
     chrome.storage.sync.set({
         removeMethod: rm,
-        tabsAllowed: ta
+        tabsAllowed: ta,
+        alertsAllowed: al
     }, function() {
-        console.log("[Remove Options] saved");
+        console.log("[Remove Options] saved" + al);
         status.textContent = 'Options saved.';
         setTimeout(function() {
             status.textContent = '';
@@ -22,10 +24,12 @@ function save_options() {
 function restore_options() {
     chrome.storage.sync.get({
         removeMethod: 'newtab',
-        tabsAllowed: '10'
+        tabsAllowed: '10',
+        alertsAllowed: false
     }, function(items) {
         document.getElementById('rm').value = items.removeMethod;
         document.getElementById('ta').value = items.tabsAllowed;
+        document.getElementById('al').checked = items.alertsAllowed;
     });
 }
 document.addEventListener('DOMContentLoaded', restore_options);

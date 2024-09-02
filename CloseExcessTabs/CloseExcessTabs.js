@@ -2,11 +2,21 @@ chrome.tabs.onCreated.addListener(checkTabCount);
 function checkTabCount() {
     chrome.storage.sync.get({
         removeMethod: 'newtab',
-        tabsAllowed: '10'
+        tabsAllowed: '10',
+        alertsAllowed: false
     }, function (items) {
         chrome.windows.getAll({populate:true}, function (windows) {
             windows.forEach(function (w) {
                 if (w.tabs.length > items.tabsAllowed) {
+                    if (items.alertsAllowed) {
+                        console.log("[Alert notification]")
+                        chrome.notifications.create({
+                            type: "basic",
+                            title: "Tab Limit Exceeded",
+                            iconUrl: "icon.png",
+                            message: "Current limit set to " + items.tabsAllowed + " tabs allowed."
+                        });
+                    }
                     if (items.removeMethod == "newtab") {
                         console.log("[Remove Method] newtab");
                         removeTabs(items, w.tabs, w.tabs.length);
